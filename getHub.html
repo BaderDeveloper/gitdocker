@@ -1,0 +1,57 @@
+<app-navbar></app-navbar>
+
+<h2>تفاصيل القضية</h2>
+
+<!-- ✅ حالة التحميل -->
+<div *ngIf="loading">جاري تحميل البيانات...</div>
+<div>DOCKER IS HARD BUT USEFUL</div>
+
+<!-- ✅ بعد تحميل البيانات -->
+<div *ngIf="!loading && lawsuit">
+  <p><strong>رقم المعاملة:</strong> {{ lawsuit.transactionNum }}</p>
+  <p><strong>تاريخ المعاملة:</strong> {{ lawsuit.transactionDate | date }}</p>
+  <p><strong>المحكمة:</strong> {{ lawsuit.court }}</p>
+  <p><strong>رقم القضية:</strong> {{ lawsuit.lawsuitNum }}</p>
+  <p><strong>تاريخ القضية:</strong> {{ lawsuit.lawsuitDate | date }}</p>
+  <p><strong>رقم الجلسة:</strong> {{ lawsuit.hearingNum }}</p>
+  <p><strong>وقت الجلسة:</strong> {{ lawsuit.hearingTime }}</p>
+  <p><strong>المدعي:</strong> {{ lawsuit.claimer }}</p>
+  <p><strong>المدعى عليه:</strong> {{ lawsuit.defendant }}</p>
+  <p><strong>الحالة:</strong> {{ lawsuit.status }}</p>
+
+  <h1>اول تعديل تجربة تعديل قيت هوب</h1>
+  <p>
+    <strong>تمت الإعادة للإدارة:</strong>
+    {{ lawsuit.isReturnedToAdmin ? "نعم" : "لا" }}
+  </p>
+  <p><strong>تقرير المحامي:</strong> {{ lawsuit.lawyerReport }}</p>
+
+  <div *ngIf="lawsuit.files && lawsuit.files.length > 0; else noFiles">
+    <h3>الملفات المرفقة:</h3>
+    <ul>
+      <li *ngFor="let f of lawsuit.files">
+        <a [href]="f.relativePath" target="_blank"> {{ f.originalName }} </a>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #noFiles>
+    <p>لا توجد ملفات مرتبطة بهذه القضية.</p>
+  </ng-template>
+
+  <!-- ✅ الاستئنافات المرتبطة (من نفس بيانات القضية) -->
+  <div *ngIf="lawsuit.appeals && lawsuit.appeals.length > 0; else noAppeals">
+    <h3>الاستئنافات المرتبطة بهذه القضية:</h3>
+    <ul>
+      <li *ngFor="let a of lawsuit.appeals">
+        <a [routerLink]="['/appeals/show', a.id]">
+          استئناف رقم {{ a.appealNum }} - {{ a.court }}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #noAppeals>
+    <p>لا يوجد استئنافات مرتبطة بهذه القضية.</p>
+  </ng-template>
+</div>
